@@ -1,0 +1,50 @@
+*.py[cod]
+
+# C extensions
+*.so
+
+# Packages
+*.egg
+*.egg-info
+MANIFEST
+dist
+build
+eggs
+parts
+bin
+var
+sdist
+develop-eggs
+.installed.cfg
+lib
+lib64
+
+# Installer logs
+pip-log.txt
+
+# Unit test / coverage reports / doc transient files
+.coverage
+.tox
+nosetests.xml
+coverage.xml
+coverage_integration.xml
+fantastico_tests.xml
+fantastico_integration_tests.xml
+pylint.out
+CHANGES.txt
+
+# Translations
+*.mo
+
+# Mr Developer
+.mr.developer.cfg
+.project
+.pydevproject
+__pycache__
+.settings
+
+# virtual environment dependencies
+pip-deps
+tmp_modules
+virtual_env
+fantastico
