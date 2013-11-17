@@ -5,4 +5,5 @@ to rapidly create API powered applications.
 
 ## Tutorial
 
-All files from this repository supports **[How to create a TODO list tutorial](http://rcosnita.github.io/fantastico/html/how_to/todo/index.html)**. 
+All files from this repository supports **[How to create a TODO list tutorial](http://rcosnita.github.io/fantastico/html/how_to/todo/index.html)**.
+Please read the [tutorial](http://rcosnita.github.io/fantastico/html/how_to/todo/index.html) in order to fully benefit from this repository. 
