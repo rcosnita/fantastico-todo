@@ -48,3 +48,6 @@ pip-deps
 tmp_modules
 virtual_env
 fantastico
+
+# project specific ignore rules
+roa_discovery
