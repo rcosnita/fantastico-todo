@@ -17,7 +17,61 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEAL
 (function($) {
     var tasks = {};
     
-    tasks.Task = Backbone.Model.extend({});
+    function getTasksUrl() {
+        return Todo.Models.Registry.getResourceUrl("Task");
+    }
     
+    tasks.Task = Backbone.Model.extend({
+        urlRoot: getTasksUrl
+    });
+    
+    tasks.TaskCollection = Backbone.Collection.extend({
+        model: tasks.Task,
+        /**
+         * This method is overriden so that it guarantees tasks are ordered alphabetically and only id and name attributes are
+         * returned for each available task (partial resource representation).
+         */
+        url: function() {
+            var url = [getTasksUrl()];
+            url.push("?");
+            
+            if(this._offset) {
+                url.push("offset=" + this._offset);
+            }
+            
+            if(this._limit) {
+                url.push("&limit=" + this._limit);
+            }
+            
+            url.push("&fields=id,name");
+            url.push("&order=asc(name)");
+            
+            return url.join("");
+        },
+        /**
+         * In comparison with standard backbone collection fetch, ROA collections support pagination. This is why options is 
+         * parsed before actually fetching the collection. 
+         */
+        fetch: function(options) {
+            options = options || {};
+
+            this._offset = options.offset;
+            this._limit = options.limit;
+
+            return Backbone.Collection.prototype.fetch.call(this, options);
+        },
+        /**
+         * This method save the items returned form REST ROA api to this backbone collection. Additionally it adds the total 
+         * items counter as collection property.
+         * 
+         * @param {Object} response The http response coming for /api/latest/tasks collection.
+         */
+        parse: function(response) {
+            this.set({"totalItems": response.totalItems});
+
+            return response.items;
+        }
+    });
+
     Todo.Models.Tasks = tasks;
 })(jQuery);
