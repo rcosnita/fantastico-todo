@@ -57,5 +57,5 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEAL
     });
 
     Todo.Models.Registry = new registry.ResourceCollection();
-    Todo.Models.Registry.fetch();
+    Todo.Models.Registry.loader = Todo.Models.Registry.fetch();
 })(jQuery);

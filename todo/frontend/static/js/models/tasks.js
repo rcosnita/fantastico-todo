@@ -43,7 +43,7 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEAL
                 url.push("&limit=" + this._limit);
             }
             
-            url.push("&fields=id,name");
+            url.push("&fields=task_id,name,status");
             url.push("&order=asc(name)");
             
             return url.join("");
@@ -67,7 +67,7 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEAL
          * @param {Object} response The http response coming for /api/latest/tasks collection.
          */
         parse: function(response) {
-            this.set({"totalItems": response.totalItems});
+            this.totalItems = response.totalItems;
 
             return response.items;
         }

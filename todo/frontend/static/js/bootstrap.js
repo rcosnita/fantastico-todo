@@ -18,4 +18,21 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEAL
     Todo = {};
 
     Todo.Models = {};
+    
+    Todo.Controllers = {};
+    
+    /**
+     * This method is invoked automatically when document is ready.
+     */
+    function initApp() {
+        var listingController = new Todo.Controllers.ListingController();
+        
+        listingController.start();
+    };
+    
+    $(document).ready(function() {
+        Todo.Models.Registry.loader.always(function() {
+            initApp();
+        });
+    });
 })(jQuery);

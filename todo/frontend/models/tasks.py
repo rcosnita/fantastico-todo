@@ -29,7 +29,7 @@ class Task(BASEMODEL):
 
     __tablename__ = "tasks"
 
-    id = Column("task_id", Integer, primary_key=True, autoincrement=True)
+    task_id = Column("task_id", Integer, primary_key=True, autoincrement=True)
     name = Column("name", String(200), nullable=False)
     description = Column("description", Text)
     status = Column("status", SmallInteger, nullable=False)
