@@ -22,6 +22,7 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEAL
     }
     
     tasks.Task = Backbone.Model.extend({
+        idAttribute: "task_id",
         urlRoot: getTasksUrl
     });
     

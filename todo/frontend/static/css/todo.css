@@ -17,6 +17,10 @@ body{
     border: 0.1em solid #1b3280;
 }
 
+.task-completed {
+    text-decoration: line-through;
+}
+
 .task > h3 {
     font-size: 1.5em;
     margin-left: 1em;

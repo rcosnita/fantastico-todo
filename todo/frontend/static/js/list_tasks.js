@@ -15,12 +15,16 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEAL
 */
 
 (function($) {
-    TPL_TASK = ['<div class="task" data-tid="<%= task.get(\"id\") %>">'];
+    TPL_TASK = ['<div class="task">'];
     TPL_TASK.push('<div class="input-group">');
     TPL_TASK.push('<span class="input-group-addon">');
-    TPL_TASK.push('<input type="checkbox" />');
+    TPL_TASK.push('<input type="checkbox" data-role="tasks-complete" data-tid="<%= task.get(\"task_id\") %>" />');
     TPL_TASK.push('</span>');
+    TPL_TASK.push('<% if(task.get("status") === 0) { %>');
     TPL_TASK.push('<h3 class="form-control"><%= task.get(\"name\") %></h3>');
+    TPL_TASK.push('<% } else { %>');
+    TPL_TASK.push('<h3 class="form-control task-completed"><%= task.get(\"name\") %></h3>');
+    TPL_TASK.push('<% } %>');    
     TPL_TASK.push("</div>");
     TPL_TASK.push("<hr/>");
     TPL_TASK.push("</div>");
@@ -31,16 +35,35 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEAL
         this._tasks = new Todo.Models.Tasks.TaskCollection();
         this._offset = 0;
         this._limit = 10;
+        this._fetchMoreSize = 5;
     };
     
     ListingController.prototype.start = function() {
         this._tfNewTask = $("#txt-new-task");
-        this._btnComplete = $("#btn-complete-task").button();
-        this._btnComplete = $("#btn-danger").button();
+        this._btnComplete = $("#btn-complete-task");
+        this._btnRemove = $("#btn-remove-task");
         this._tasksArea = $(".tasks-area");
         this._pagerText = $(".tasks-pager").find("p");
+        this._btnPagerFetch = $(".tasks-pager").find("button");
         
         this._initEvents();
+    };
+
+    ListingController.prototype._getSelectedTasks = function() {
+        var ids = [],
+            tasksChk = this._tasksArea.find("input[data-role='tasks-complete']");
+            
+        _.each(tasksChk, function(item) {
+            item = $(item);
+            
+            if(!item.is(":checked")) {
+                return;
+            }
+            
+            ids.push(parseInt(item.attr("data-tid")));
+        });
+
+        return ids;
     };
 
     ListingController.prototype._initEvents = function() {
@@ -54,6 +77,22 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEAL
             }
             
             return true;
+        });
+        
+        this._btnRemove.click(function() {
+            var ids = self._getSelectedTasks();
+            
+            self._deleteTasks(ids);
+        });
+        
+        this._btnComplete.click(function() {
+            var ids = self._getSelectedTasks();
+            
+            self._completeTasks(ids);
+        });
+        
+        this._btnPagerFetch.click(function() {
+            self._fetchMoreTasks();
         });
         
         this._tasks.on("reset", function() {
@@ -99,6 +138,64 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEAL
             pagesText = displayedItems + " out of " + totalItems;
 
         this._pagerText.html(pagesText);
+    };
+    
+    ListingController.prototype._deleteTasks = function(taskIds) {
+        this._btnRemove.button("loading");
+
+        taskIds = taskIds || [];
+        
+        var deletePromises = [],
+            self = this;
+        
+        _.each(taskIds, function(taskId) {
+            var response = new Todo.Models.Tasks.Task({"task_id": taskId}).destroy();
+            
+            taskIds.push(response);
+        });
+        
+        $.when.apply($, deletePromises).done(function() {
+            self._btnRemove.button("reset");
+        
+            self._tasks.reset();
+        });
+    };
+    
+    ListingController.prototype._completeTasks = function(taskIds) {
+        this._btnComplete.button("loading");
+        
+        taskIds = taskIds || [];
+        
+        var updatePromises = [],
+            self = this;
+        
+        _.each(taskIds, function(taskId) {
+            var task = self._tasks.get(taskId);
+            
+            task.set({"status": 1});
+            
+            updatePromises.push(task.save());
+        });
+
+        $.when.apply($, updatePromises).done(function() {
+            self._btnComplete.button("reset");
+            
+            self._tasks.reset();
+        });
+    };
+    
+    ListingController.prototype._fetchMoreTasks = function() {
+        var newLimit = this._limit + this._fetchMoreSize;
+        
+        newLimit = Math.min(newLimit, this._tasks.totalItems);
+        
+        if(newLimit >= this._tasks.totalItems) {
+            this._btnPagerFetch.hide();
+        }
+        
+        this._limit = newLimit;
+        
+        this._tasks.reset();
     };
 
     Todo.Controllers.ListingController = ListingController;
