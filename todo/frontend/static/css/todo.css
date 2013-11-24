@@ -1,0 +1,30 @@
+body{
+    font-family: Calibri,Verdana,"Times New Roman";
+    margin-left: 1%;
+}
+
+.input-large {
+    height: 4em;
+}
+
+.tasks-area {
+    padding-top: 0.8em;
+    background-color: #FFFFCC;
+    min-height: 200px;
+}
+
+.task > hr {
+    border: 0.1em solid #1b3280;
+}
+
+.task > h3 {
+    font-size: 1.5em;
+    margin-left: 1em;
+}
+
+.tasks-pager > p {
+    display: inline-block;
+    font-size: 1.3em;
+    font-weight: bold;
+    padding-right: 2em;
+}
