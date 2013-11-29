@@ -96,10 +96,9 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEAL
         });
         
         this._tasks.on("reset", function() {
-            self._tasksArea.html("");
             self._fetchTasks();
         });
-        
+
         this._pagerText.html("");
         this._tasks.reset();
     };
@@ -110,6 +109,8 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEAL
             self = this;
         
         response.done(function() {
+            self._tasksArea.html("");
+        
             self._tasks.each(function(task) {
                 self._renderTask(task);
             });
@@ -127,9 +128,12 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEAL
     };
     
     ListingController.prototype._createTask = function(taskName) {
-        this._tasks.create({"name": taskName, "status": 0});
+        var task = new Todo.Models.Tasks.Task({"name": taskName, "status": 0}),
+            self = this;
         
-        this._tasks.reset();
+        task.save().always(function() {
+            self._fetchTasks();
+        });
     };
     
     ListingController.prototype._showPageText = function() {
