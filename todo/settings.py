@@ -34,3 +34,21 @@ class BaseProfile(BasicSettings):
         '''This method overrides the default roa api location to a separate domain.'''
 
         return "http://api.fantastico.com:12000"
+
+class AwsProfile(BaseProfile):
+    '''todo web application production profile.'''
+
+    @property
+    def database_config(self):
+        db_config = super(AwsProfile, self).database_config
+
+        db_config["host"] = "fantastico.ccv3dqqpsvpf.eu-west-1.rds.amazonaws.com"
+        db_config["show_sql"] = False
+
+        return db_config
+
+    @property
+    def roa_api(self):
+        '''This method overrides the default roa api location to a separate domain.'''
+
+        return "http://api.fantastico.com"
