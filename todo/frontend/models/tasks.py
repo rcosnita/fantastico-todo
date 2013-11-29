@@ -33,8 +33,10 @@ class Task(BASEMODEL):
     name = Column("name", String(200), nullable=False)
     description = Column("description", Text)
     status = Column("status", SmallInteger, nullable=False)
+    userid = Column("userid", String(200), nullable=False)
 
-    def __init__(self, name=None, description=None, status=0):
+    def __init__(self, name=None, description=None, status=0, userid=None):
         self.name = name
         self.description = description
         self.status = status
+        self.userid = userid

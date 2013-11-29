@@ -19,9 +19,18 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEAL
     
     function getTasksUrl() {
         return Todo.Models.Registry.getResourceUrl("Task");
-    }
+    };
+    
+    function getUserId() {
+        return $.cookie("fantastico.userid");
+    };
     
     tasks.Task = Backbone.Model.extend({
+        constructor: function() {
+            Backbone.Model.apply(this, arguments);
+
+            this.set({"userid": getUserId()});
+        },
         idAttribute: "task_id",
         urlRoot: getTasksUrl
     });
@@ -44,8 +53,9 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEAL
                 url.push("&limit=" + this._limit);
             }
             
-            url.push("&fields=task_id,name,status");
+            url.push("&fields=task_id,name,status,userid");
             url.push("&order=asc(name)");
+            url.push("&filter=eq(userid," + getUserId() + ")")
             
             return url.join("");
         },

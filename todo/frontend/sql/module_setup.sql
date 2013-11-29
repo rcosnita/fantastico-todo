@@ -14,10 +14,13 @@
 # ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ##############################################################################################################################
 
-CREATE TABLE IF NOT EXISTS tasks(
+DROP TABLE IF EXISTS tasks;
+
+CREATE TABLE tasks(
 	task_id INT NOT NULL AUTO_INCREMENT,
 	name VARCHAR(200) NOT NULL,
 	description TEXT,
 	status SMALLINT,
+	userid VARCHAR(100) NOT NULL,
 	PRIMARY KEY(task_id)
 );

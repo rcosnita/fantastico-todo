@@ -20,18 +20,35 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEAL
 from fantastico.mvc.base_controller import BaseController
 from fantastico.mvc.controller_decorators import Controller, ControllerProvider
 from webob.response import Response
+import uuid
 
 @ControllerProvider()
 class TodoUi(BaseController):
     '''This class provides all routes used by todo frontend application.'''
 
+    _MAX_AGE = 3600
+    _USERID_COOKIE = "fantastico.userid"
+
     @Controller(url="/frontend/ui/index")
     def get_index(self, request):
         '''This method returns the index of todo ui application.'''
 
+        append_cookie = False
+        userid = request.cookies.get(self._USERID_COOKIE)
+
+        if not userid:
+            append_cookie = True
+            userid = uuid.uuid4()
+
         content = self.load_template("listing.html")
 
-        return Response(content)
+        response = Response(content)
+
+        if append_cookie:
+            response.set_cookie(self._USERID_COOKIE, value=str(userid), max_age=self._MAX_AGE, path="/",
+                                secure=False)
+
+        return response
 
     @Controller(url="/frontend/ui/tasks-list-menu")
     def get_tasks_menu(self, request):

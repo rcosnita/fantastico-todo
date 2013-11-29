@@ -34,6 +34,9 @@ class TaskValidator(ResourceValidator):
         if resource.status is None:
             errors.append("Status attribute is mandatory.")
 
+        if resource.userid is None or len(resource.userid) == 0:
+            errors.append("Userid attribute is mandatory.")
+
         if len(errors) == 0:
             return
 
