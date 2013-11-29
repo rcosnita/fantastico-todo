@@ -51,4 +51,4 @@ class AwsProfile(BaseProfile):
     def roa_api(self):
         '''This method overrides the default roa api location to a separate domain.'''
 
-        return "http://api.fantastico.com"
+        return "http://api.todo.fantastico.scrum-expert.ro"
