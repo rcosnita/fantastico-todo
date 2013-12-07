@@ -29,6 +29,12 @@ class TodoUi(BaseController):
     _MAX_AGE = 3600
     _USERID_COOKIE = "fantastico.userid"
 
+    @Controller(url="^/$")
+    def redirect_to_home(self, request):
+        '''This method is used to redirect root requests to frontend ui index route.'''
+
+        return request.redirect("/frontend/ui/index")
+
     @Controller(url="/frontend/ui/index")
     def get_index(self, request):
         '''This method returns the index of todo ui application.'''
